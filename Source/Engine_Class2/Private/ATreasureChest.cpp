@@ -3,6 +3,8 @@
 
 #include "ATreasureChest.h"
 #include "Components/BoxComponent.h"
+#include "Engine/Engine.h"
+#include "GameFramework/Character.h"
 
 // Sets default values
 AATreasureChest::AATreasureChest()
@@ -19,6 +21,7 @@ AATreasureChest::AATreasureChest()
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>("Collision Detection");
 
 	SetRootComponent(BoxCollider);
+	BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &AATreasureChest::OnBeginOverlapComponentEvent);
 
 	TreasureMesh->SetupAttachment(BoxCollider);
 
@@ -41,10 +44,27 @@ void AATreasureChest::Tick(float DeltaTime)
 }
 
 void AATreasureChest::Collect() {
-	
+	if (bCollected) {
+		return;
+	}
+	else {
+		bCollected = true;
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::White, TEXT("Collect"));
+		}
+	}
 }
 
 void AATreasureChest::OnBeginOverlapComponentEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	ACharacter* tempChar = Cast<ACharacter>(OtherActor);
+	
 
+	if (tempChar){
+		Collect();
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("Collide with Character"));
+		}
+	}
+	
 }
