@@ -2,4 +2,9 @@
 
 
 #include "AMainPlayerState.h"
+#include "Net/UnrealNetwork.h"
 
+void AAMainPlayerState::AddPlayerScore(int amount)
+{
+	PlayerScore += amount;
+}
