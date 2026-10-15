@@ -64,7 +64,7 @@ void AATreasureChest::OnBeginOverlapComponentEvent(UPrimitiveComponent* Overlapp
 		Collect();
 		AAMainPlayerState* tempPS = tempChar->GetPlayerState<AAMainPlayerState>();
 
-		if (tempPS) { // increase score
+		if (tempPS && !bCollected) { // increase score
 			tempPS->AddPlayerScore(5);
 		}
 
